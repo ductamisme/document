@@ -1,0 +1,17 @@
+@RunWith(AndroidJUnit4::class)
+class MyTestSuite {
+    @Test fun testEvent() {
+       launchActivity<MyActivity>().use {
+       }
+    }
+}
+
+The example below shows how to define a rule and get an instance of a scenario from it:
+@RunWith(AndroidJUnit4::class)
+class MyTestSuite {
+    @get:Rule var activityScenarioRule = activityScenarioRule<MyActivity>()
+
+    @Test fun testEvent() {
+        val scenario = activityScenarioRule.scenario
+    }
+}
