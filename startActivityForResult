@@ -1,0 +1,37 @@
+When a child activity exits, it can call setResult(int) to return data to its parent. 
+The child activity must always supply a result code, which can be the standard results RESULT_CANCELED, RESULT_OK, 
+or any custom values starting at RESULT_FIRST_USER.
+In addition, the child activity can optionally return an Intent object containing any additional data it wants.
+The parent activity uses the onActivityResult(int, int, Intent) method, 
+along with the integer identifier the parent activity originally supplied, to receive the information.
+
+If a child activity fails for any reason, such as crashing, the parent activity receives a result with the code RESULT_CANCELED.
+
+
+class MyActivity : Activity() {
+    // ...
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+            // When the user center presses, let them pick a contact.
+            startActivityForResult(
+                    Intent(Intent.ACTION_PICK,Uri.parse("content://contacts")),
+                    PICK_CONTACT_REQUEST)
+            return true
+        }
+        return false
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        when (requestCode) {
+            PICK_CONTACT_REQUEST ->
+                if (resultCode == RESULT_OK) {
+                    startActivity(Intent(Intent.ACTION_VIEW, intent?.data))
+                }
+        }
+    }
+
+    companion object {
+        internal val PICK_CONTACT_REQUEST = 0
+    }
+}
